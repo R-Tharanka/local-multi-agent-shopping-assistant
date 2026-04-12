@@ -1,0 +1,10 @@
+[
+  {
+    "id": "p1",
+    "name": "Sample Product",
+    "price": 199.99,
+    "currency": "USD",
+    "rating": 4.3
+  }
+]
+
