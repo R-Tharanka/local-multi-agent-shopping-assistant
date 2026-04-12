@@ -1,0 +1,100 @@
+# ==============================
+# Python
+# ==============================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Compiled files
+*.so
+
+# ==============================
+# Virtual Environment
+# ==============================
+venv/
+env/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# ==============================
+# Environment Variables
+# ==============================
+.env
+.env.*
+!.env.example
+
+# ==============================
+# Logs (IMPORTANT for your project)
+# ==============================
+logs/
+*.log
+
+# ==============================
+# OS Files
+# ==============================
+.DS_Store
+Thumbs.db
+
+# ==============================
+# IDE / Editor
+# ==============================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ==============================
+# Testing / Coverage
+# ==============================
+.coverage
+htmlcov/
+.pytest_cache/
+
+# ==============================
+# Build / Distribution
+# ==============================
+build/
+dist/
+*.egg-info/
+
+# ==============================
+# Jupyter Notebooks
+# ==============================
+.ipynb_checkpoints/
+
+# ==============================
+# Data Files (optional - depends on your dataset size)
+# ==============================
+# If dataset is large → ignore it
+# If small → keep it in repo
+
+# app/data/*.json
+
+# ==============================
+# Temporary / Cache Files
+# ==============================
+*.tmp
+*.temp
+.cache/
+
+# ==============================
+# Ollama / Local Model Files (VERY IMPORTANT)
+# ==============================
+# Never commit local models
+*.gguf
+*.bin
+*.pt
+*.pth
+
+# ==============================
+# Docker (if you use later)
+# ==============================
+*.dockerignore
+
+# ==============================
+# Misc
+# ==============================
+*.bak
+*.old
