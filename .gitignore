@@ -98,3 +98,10 @@ dist/
 # ==============================
 *.bak
 *.old
+
+# ==============================
+# Project-Specific Files (add any specific files you don't want to track)
+# ==============================
+CTSE - Assignment 2.pdf
+Developer Specification Document.docx
+steps.docx
