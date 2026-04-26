@@ -51,6 +51,7 @@ Thumbs.db
 .coverage
 htmlcov/
 .pytest_cache/
+pytest-cache-files-*/
 
 # ==============================
 # Build / Distribution
