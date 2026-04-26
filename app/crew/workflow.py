@@ -8,11 +8,10 @@ from app.state.state_manager import StateManager
 from app.utils.logger import get_logger
 
 
-def run_workflow() -> dict:
+def run_workflow(query: str = "example: best phone under $500") -> dict:
     logger = get_logger()
     state = StateManager()
 
-    query = "example: best phone under $500"
     logger.info("Starting workflow")
 
     parsed = query_run(query)
@@ -29,4 +28,3 @@ def run_workflow() -> dict:
 
     logger.info("Finished workflow")
     return state.snapshot()
-

@@ -15,5 +15,5 @@ This repo contains a scaffold for a CrewAI-based multi-agent shopping assistant.
    - `pip install -r requirements.txt`
 3. Set environment variables in `.env`
 4. Run:
-   - `python -m app.main`
-
+   - Interactive prompt: `python -m app.main`
+   - One-shot query: `python -m app.main --query "I need a laptop under 200000 for coding with SSD and good battery life"`
