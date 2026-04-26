@@ -17,3 +17,7 @@ This repo contains a scaffold for a CrewAI-based multi-agent shopping assistant.
 4. Run:
    - Interactive prompt: `python -m app.main`
    - One-shot query: `python -m app.main --query "I need a laptop under 200000 for coding with SSD and good battery life"`
+
+## Query Agent evaluation
+- Unit tests: `pytest -q`
+- Rule-based benchmark: `python tests/evaluation.py`

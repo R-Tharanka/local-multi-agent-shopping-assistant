@@ -16,6 +16,9 @@ def test_happy_path_laptop_under_budget_with_preferences():
     assert "coding" in parsed["preferences"]
     assert "ssd" in parsed["preferences"]
     assert "good battery" in parsed["preferences"]
+    assert parsed["use_case"] == "coding"
+    assert "ssd" in parsed["must_have_features"]
+    assert "good battery" in parsed["nice_to_have_features"]
     assert "category" not in parsed["missing_fields"]
     assert "budget" not in parsed["missing_fields"]
 
@@ -51,6 +54,14 @@ def test_currency_handling_usd_symbol():
     parsed = parse_user_query("best phone under $500 with good camera")
     assert parsed["budget"] == 500
     assert parsed["currency"] == "USD"
+    assert parsed["sort_preference"] == "best_value"
+
+
+def test_sort_preference_best_camera():
+    parsed = parse_user_query("best camera phone under $500")
+    assert parsed["category"] == "phone"
+    assert parsed["budget"] == 500
+    assert parsed["sort_preference"] == "best_camera"
 
 
 def test_empty_query_is_safe():
@@ -83,6 +94,16 @@ def test_ambiguous_language_does_not_invent_category_or_budget():
     assert parsed["budget"] is None
     assert "student" in parsed["preferences"]
     assert "affordable" in parsed["preferences"]
+
+
+def test_use_case_extraction_studies_is_safe():
+    parsed = parse_user_query("I need something good for studies")
+    assert parsed["category"] is None
+    assert parsed["budget"] is None
+    assert parsed["use_case"] == "studies"
+    assert "studies" in parsed["preferences"]
+    assert "category" in parsed["missing_fields"]
+    assert "budget" in parsed["missing_fields"]
 
 
 def test_multiple_categories_are_flagged_and_first_supported_is_chosen():
