@@ -51,6 +51,7 @@ Thumbs.db
 .coverage
 htmlcov/
 .pytest_cache/
+pytest-cache-files-*/
 
 # ==============================
 # Build / Distribution
@@ -105,3 +106,5 @@ dist/
 CTSE - Assignment 2.pdf
 Developer Specification Document.docx
 steps.docx
+
+extracted_text/*
