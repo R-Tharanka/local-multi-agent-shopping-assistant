@@ -11,10 +11,13 @@ def run(query: str) -> dict:
 
 def run_with_state(query: str, *, state: StateManager | None = None) -> dict:
     logger = get_logger()
-    logger.info("[Query Agent] query received: %s", query)
+    logger.info("[Query Agent] Raw query received: %s", query)
 
     logger.info("[Query Agent] parser invoked")
     parsed = parse_user_query(query)
+
+    logger.info("[Query Agent] Extracted category: %s", parsed.get("category"))
+    logger.info("[Query Agent] Extracted budget: %s", parsed.get("budget"))
 
     GLOBAL_STATE.update(
         {
