@@ -6,7 +6,7 @@ from urllib.error import URLError
 
 from app import config
 from app.state.global_state import GLOBAL_STATE
-from app.tools.recommendation_tool import build_recommendation_payload, generate_recommendation_report
+from app.tools.recommendation_tool import generate_recommendation_report
 from app.utils.logger import get_logger
 
 try:
@@ -48,21 +48,17 @@ def _call_ollama(prompt: str) -> str | None:
 
 def run(comparison: dict) -> dict:
     """Return a structured recommendation result for workflow/tests."""
-    payload = build_recommendation_payload(comparison)
-    payload["comparison"] = comparison
+    comparison = comparison or {}
+    comparison_result = comparison.get("comparison") if isinstance(comparison.get("comparison"), dict) else comparison
 
     if config.LLM_PROVIDER.lower() == "ollama":
-        llm_report = _call_ollama(_build_prompt(comparison))
-        if llm_report:
-            payload["llm_report"] = llm_report
-        else:
-            payload["llm_report"] = generate_recommendation_report(comparison)
+        llm_report = _call_ollama(_build_prompt(comparison_result))
+        final_text = llm_report or generate_recommendation_report(comparison_result)
+    else:
+        final_text = generate_recommendation_report(comparison_result)
 
-    final_text = payload.get("llm_report") or payload.get("report")
-    if final_text:
-        payload["final_recommendation"] = final_text
-        GLOBAL_STATE["final_recommendation"] = final_text
-
+    payload = {"final_recommendation": final_text}
+    GLOBAL_STATE["final_recommendation"] = final_text
     return payload
 
 
