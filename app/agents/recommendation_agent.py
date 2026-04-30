@@ -5,6 +5,7 @@ from urllib import request
 from urllib.error import URLError
 
 from app import config
+from app.state.global_state import GLOBAL_STATE
 from app.tools.recommendation_tool import build_recommendation_payload, generate_recommendation_report
 from app.utils.logger import get_logger
 
@@ -56,6 +57,11 @@ def run(comparison: dict) -> dict:
             payload["llm_report"] = llm_report
         else:
             payload["llm_report"] = generate_recommendation_report(comparison)
+
+    final_text = payload.get("llm_report") or payload.get("report")
+    if final_text:
+        payload["final_recommendation"] = final_text
+        GLOBAL_STATE["final_recommendation"] = final_text
 
     return payload
 

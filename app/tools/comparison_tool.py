@@ -21,10 +21,21 @@ def _normalize(value: float, min_value: float, max_value: float) -> float:
     return (value - min_value) / (max_value - min_value)
 
 
-def compare(products: list[dict]) -> dict:
+def _product_name(product: dict) -> str | None:
+    name = product.get("name") or product.get("title") or product.get("product")
+    if isinstance(name, str) and name.strip():
+        return name.strip()
+    return None
+
+
+def compare_products(products: list[dict]) -> dict:
     items = [p for p in products if isinstance(p, dict)]
     if not items:
-        return {"best_performance": None, "best_value": None, "ranked": []}
+        return {
+            "best_performance": None,
+            "best_value": None,
+            "ranked": [],
+        }
 
     prices = [_safe_float(p.get("price")) for p in items]
     ratings = [_safe_float(p.get("rating")) for p in items]
@@ -54,9 +65,18 @@ def compare(products: list[dict]) -> dict:
     ranked_by_performance = sorted(ranked, key=lambda r: r["performance_score"], reverse=True)
     ranked_by_value = sorted(ranked, key=lambda r: r["value_score"], reverse=True)
 
+    best_perf_product = ranked_by_performance[0]["product"]
+    best_value_product = ranked_by_value[0]["product"]
+
     return {
-        "best_performance": ranked_by_performance[0]["product"],
-        "best_value": ranked_by_value[0]["product"],
+        "best_performance": _product_name(best_perf_product),
+        "best_value": _product_name(best_value_product),
+        "best_performance_product": best_perf_product,
+        "best_value_product": best_value_product,
         "ranked": ranked,
     }
+
+
+def compare(products: list[dict]) -> dict:
+    return compare_products(products)
 
