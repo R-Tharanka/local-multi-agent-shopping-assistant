@@ -42,6 +42,18 @@ def search_products(query: dict, data_path: str | Path) -> list[dict]:
     if not isinstance(data, list):
         return []
 
+    original_query = _normalize_str(query.get("original_query") or "")
+    if original_query:
+        exact_matches: list[dict] = []
+        for item in data:
+            if not isinstance(item, dict):
+                continue
+            name = _normalize_str(item.get("name") or "")
+            if name and name in original_query:
+                exact_matches.append(item)
+        if exact_matches:
+            return exact_matches
+
     category = _normalize_str(query.get("category") or query.get("product_category") or "")
     budget = query.get("budget")
     preferences = query.get("preferences") or []
