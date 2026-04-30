@@ -18,10 +18,24 @@ except Exception:  # pragma: no cover
 def _build_prompt(comparison: dict) -> str:
     comparison_json = json.dumps(comparison, ensure_ascii=True)
     return (
-        "You are a shopping assistant. Summarize the comparison data, then give a clear recommendation. "
-        "Keep it concise, use short bullet points, and end with a single-line final recommendation.\n\n"
+        "You are a shopping assistant. Summarize the comparison data and give a clear recommendation. "
+        "Return plain text only (no markdown, no bullets), in 2-4 sentences.\n\n"
         f"Comparison data:\n{comparison_json}"
     )
+
+
+def _clean_llm_text(text: str) -> str:
+    cleaned = text.replace("\t", " ").replace("**", "")
+    lines = []
+    for line in cleaned.splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+        stripped = stripped.lstrip("-•*")
+        stripped = stripped.strip()
+        if stripped:
+            lines.append(stripped)
+    return " ".join(lines)
 
 
 def _call_ollama(prompt: str) -> str | None:
@@ -53,7 +67,10 @@ def run(comparison: dict) -> dict:
 
     if config.LLM_PROVIDER.lower() == "ollama":
         llm_report = _call_ollama(_build_prompt(comparison_result))
-        final_text = llm_report or generate_recommendation_report(comparison_result)
+        if llm_report:
+            final_text = _clean_llm_text(llm_report)
+        else:
+            final_text = generate_recommendation_report(comparison_result)
     else:
         final_text = generate_recommendation_report(comparison_result)
 
