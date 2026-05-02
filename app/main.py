@@ -31,6 +31,11 @@ def main() -> None:
             query = ""
 
     state = run_workflow(query or "example: best phone under $500")
+    recommendations = state.get("recommendations")
+    if isinstance(recommendations, dict):
+        final_text = recommendations.get("final_recommendation")
+        if isinstance(final_text, str):
+            recommendations["final_recommendation"] = final_text.replace("\n", " ")
     print(json.dumps(state, indent=2, ensure_ascii=False))
 
 
