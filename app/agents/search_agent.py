@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from app.state.global_state import GLOBAL_STATE
-from app.tools.product_search_tool import search_products
+from app.tools.product_search_tool import search_products_from_query
 from app.utils.logger import get_logger
 
 
@@ -10,11 +10,7 @@ def run(parsed_query: dict) -> list[dict]:
     parsed_query = parsed_query or {}
     logger.info("[Search Agent] Received query: %s", parsed_query)
 
-    category = parsed_query.get("category")
-    budget = parsed_query.get("budget")
-    preferences = parsed_query.get("preferences") or []
-
-    products = search_products(category, budget, preferences)
+    products = search_products_from_query(parsed_query)
 
     GLOBAL_STATE["matched_products"] = products
 

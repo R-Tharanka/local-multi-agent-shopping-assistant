@@ -47,6 +47,24 @@ def _load_products(data_path: str | Path) -> list[dict]:
     return items
 
 
+def _extract_brands(original_query: str, items: list[dict]) -> set[str]:
+    if not original_query or not items:
+        return set()
+
+    brands: set[str] = set()
+    for item in items:
+        brand = _normalize_str(item.get("brand") or "")
+        if brand:
+            brands.add(brand)
+
+    matched: set[str] = set()
+    for brand in brands:
+        if brand and brand in original_query:
+            matched.add(brand)
+
+    return matched
+
+
 def search_products(
     category: str | None,
     budget: float | int | None,
@@ -91,9 +109,13 @@ def search_products_from_query(query: dict, data_path: str | Path = DATA_PATH) -
     query = query or {}
 
     original_query = _normalize_str(query.get("original_query") or "")
+    items = _load_products(data_path)
+    if not items:
+        return []
+
     if original_query:
         exact_matches: list[dict] = []
-        for item in _load_products(data_path):
+        for item in items:
             name = _normalize_str(item.get("name") or "")
             if name and name in original_query:
                 exact_matches.append(item)
@@ -106,5 +128,11 @@ def search_products_from_query(query: dict, data_path: str | Path = DATA_PATH) -
     if isinstance(preferences, str):
         preferences = [preferences]
 
-    return search_products(category, budget, preferences, data_path=data_path)
+    results = search_products(category, budget, preferences, data_path=data_path)
+
+    matched_brands = _extract_brands(original_query, items)
+    if matched_brands:
+        results = [item for item in results if _normalize_str(item.get("brand") or "") in matched_brands]
+
+    return results
 
